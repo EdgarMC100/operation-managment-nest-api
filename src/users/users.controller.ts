@@ -1,4 +1,12 @@
-import { Controller, Res, HttpStatus, Get, Version } from '@nestjs/common';
+import {
+  Controller,
+  Res,
+  HttpStatus,
+  Get,
+  Version,
+  Body,
+  Post,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { User } from 'src/model/user.entity';
 import { UsersService } from './users.service';
@@ -16,14 +24,12 @@ export class UsersController {
     return res.status(HttpStatus.OK).json(users);
   }
 
-  // @Post('/signup')
-  // async signUp(@Res() response, @Body() user: User) {
-  //   console.log(user);
-  //   const newUser = await this.usersService.signup(user);
-  //   return response.status(
-  //     HttpStatus.CREATED).json({
-  //       newUser,
-  //     }),
-  //   );
-  // }
+  @Post('/signup')
+  async signUp(@Res() response, @Body() user: User) {
+    console.log(user);
+    const newUser = await this.usersService.signup(user);
+    return response.status(HttpStatus.CREATED).json({
+      newUser,
+    });
+  }
 }
