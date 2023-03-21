@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MyloggerProvider } from './providers/mylogger/mylogger.provider/mylogger.provider';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -17,9 +18,18 @@ async function bootstrap() {
   // if (logger) {
   //   app.useLogger(new MyloggerProvider(configService));
   // }
+
+  //OpenAPI
+  const baseDocument = new DocumentBuilder()
+    .setTitle('Operation-Management')
+    .setDescription('The operation management API description')
+    .setVersion('1.0')
+    .addTag('Users')
+    .build();
+  const fullDocument = SwaggerModule.createDocument(app, baseDocument);
+  SwaggerModule.setup('api', app, fullDocument);
   const port = configService.get('PORT');
-  console.log(configService.get('CORS'));
-  console.log(port);
+
   app.enableVersioning({
     type: VersioningType.URI,
   });
